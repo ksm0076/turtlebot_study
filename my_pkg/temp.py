@@ -6,7 +6,7 @@ import cv2
 from cv_bridge import CvBridge
 import numpy as np
 import argparse
-
+import random
 from ultralytics import YOLO
 
 
@@ -23,9 +23,12 @@ class PersonSegmentationNode(Node):
         self.subscription  # prevent unused variable warning
         self.bridge = CvBridge()
         self.model = YOLO("yolov8n.pt")
+        self._class_to_color = {}
 
     def image_listener_callback(self, msg):
+        print("GOGO")
         cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
+        
 
         results = self.model.predict(source=cv_image, device="cuda:0", classes=[0], verbose=False)
 
@@ -36,7 +39,6 @@ class PersonSegmentationNode(Node):
             return
 
         for i in range(len(results)):
-            inference_result =  Yolov8Inference()
 
             if results.boxes :
                 bbox_info = results.boxes[i]
@@ -49,28 +51,28 @@ class PersonSegmentationNode(Node):
                 size_y = float(bbox[3])
 
 
-                if label not in self._class_to_color :
+                if class_name not in self._class_to_color :
                     r = random.randint(0, 255)
                     g = random.randint(0, 255)
                     b = random.randint(0, 255)
-                    self._class_to_color[label] = (r, g, b)
+                    self._class_to_color[class_name] = (r, g, b)
                 
-                color = self._class_to_color[label]
+                color = self._class_to_color[class_name]
 
                 pt1 = (round(center_x - size_x / 2.0),
                         round(center_y - size_y / 2.0))
                 pt2 = (round(center_x + size_x / 2.0),
                         round(center_y + size_y / 2.0))
-                cv2.rectangle(img, pt1, pt2, color, 2)
-                cv2.putText(img, str(class_name), ((pt1[0]+pt2[0])//2-5, pt1[1]-10), cv2.FONT_HERSHEY_SIMPLEX, 1, color, thickness=2)
+                cv2.rectangle(cv_image, pt1, pt2, color, 2)
+                cv2.putText(cv_image, str(class_name), ((pt1[0]+pt2[0])//2-5, pt1[1]-10), cv2.FONT_HERSHEY_SIMPLEX, 1, color, thickness=2)
 
         
-        self.img_pub.publish(self.cv_bridge.cv2_to_imgmsg(img, encoding="bgr8"))
+        self.img_pub.publish(self.bridge.cv2_to_imgmsg(cv_image, encoding="bgr8"))
 
 
 def main(args=None):
     parser = argparse.ArgumentParser(description='Person Segmentation Node')
-    parser.add_argument('--image_topic', type=str, default='/camera/color/image_raw',
+    parser.add_argument('--image_topic', type=str, default='/camera/image_raw',
                         help='The image topic to subscribe to')
     args = parser.parse_args()
 

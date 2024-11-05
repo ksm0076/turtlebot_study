@@ -47,6 +47,7 @@ class RobotController:
         # 현재 위치 업데이트 콜백 함수
         self.current_pose = data.pose.pose
         
+    # 
     def pallet_callback(self,msg):
         self.pallet_axis = msg
 
