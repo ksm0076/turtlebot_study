@@ -69,7 +69,6 @@ class PersonSegmentationNode(Node):
         
         self.img_pub.publish(self.bridge.cv2_to_imgmsg(cv_image, encoding="bgr8"))
 
-
 def main(args=None):
     parser = argparse.ArgumentParser(description='Person Segmentation Node')
     parser.add_argument('--image_topic', type=str, default='/camera/image_raw',

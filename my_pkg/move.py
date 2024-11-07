@@ -50,7 +50,7 @@ class RobotController:
     # 
     def pallet_callback(self,msg):
         self.pallet_axis = msg
-
+        print("pallet_axis :", self.pallet_axis)
     def respawn_callback(self, msg):
         self.respawn_data = msg.data
 
@@ -98,7 +98,7 @@ class RobotController:
                         
                         target_x = self.pallet_axis.x
                         target_y = self.pallet_axis.y
-                        print(target_x, target_y)
+                            
                         self.target_relative_pose.position.x = target_x
                         self.target_relative_pose.position.y = target_y
                         yaw_error = self.calculate_yaw_error()

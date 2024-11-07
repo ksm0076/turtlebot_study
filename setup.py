@@ -25,6 +25,7 @@ setup(
             'person_segmentation = my_pkg.person_segmentation:main',
             'nav_person = my_pkg.nav_person:main',
             'temp = my_pkg.temp:main',
+            'quart_test = my_pkg.quart_test:main',
         ],
     },
 )
