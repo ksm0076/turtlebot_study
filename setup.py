@@ -26,6 +26,7 @@ setup(
             'nav_person = my_pkg.nav_person:main',
             'temp = my_pkg.temp:main',
             'quart_test = my_pkg.quart_test:main',
+            'measure_distance = my_pkg.measure_distance:main',
         ],
     },
 )
