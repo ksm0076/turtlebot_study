@@ -26,16 +26,17 @@ class DistanceTracker(Node):
         self.total_distance = 0.0
         self.is_measuring_distance = False
         
+        self.create_timer(1, self.show_distance)
+        
     def odom_callback(self, msg):
         if self.is_measuring_distance:
             current_x = msg.pose.pose.position.x
             current_y = msg.pose.pose.position.y
-            print(f'Received odom: x={current_x}, y={current_y}')
             if self.prev_x is not None and self.prev_y is not None:
                 distance = math.sqrt((current_x - self.prev_x)**2 + (current_y - self.prev_y)**2)
                 self.total_distance += distance
 
-                self.get_logger().info(f'Traveled distance: {self.total_distance:.2f} m')
+                
 
             self.prev_x = current_x
             self.prev_y = current_y
@@ -56,8 +57,11 @@ class DistanceTracker(Node):
         
     def stop_distance_measurement(self):
         self.is_measuring_distance = False
-        print(f"Distance measurement STOP!! Total distance : {self.total_distance:.2f} m")
-        
+        print(f"Distance measurement STOP, Total distance : {self.total_distance:.2f} m")
+    
+    def show_distance(self):
+        if self.is_measuring_distance:
+            self.get_logger().info(f'Traveled distance: {self.total_distance:.2f} m')
         
 def main(args=None):
     rclpy.init(args=args)
