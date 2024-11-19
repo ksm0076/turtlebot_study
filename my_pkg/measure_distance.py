@@ -81,8 +81,7 @@ class DistanceTracker(Node):
             # self.get_logger().info(f'Distance: {self.total_distance:.2f} m')
             # self.get_logger().info(f'Average Speed: {self.speed:.2f} km/h')
             # self.get_logger().info(f'Time: {str(self.minute).zfill(2)}:{str(self.second).zfill(2)}')
-            
-            
+                        
             print(f'Distance: {self.total_distance:.2f} m')
             print(f'Average Speed: {self.speed:.2f} km/h')
             print(f'Time: {str(self.minute).zfill(2)}:{str(self.second).zfill(2)}')
