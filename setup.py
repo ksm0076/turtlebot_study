@@ -28,6 +28,7 @@ setup(
             'quart_test = my_pkg.quart_test:main',
             'measure_distance = my_pkg.measure_distance:main',
             'measure_command = my_pkg.measure_command:main',
+            'distance_gui = my_pkg.distance_gui:main',
         ],
     },
 )

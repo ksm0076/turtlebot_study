@@ -8,12 +8,12 @@ from ultralytics import YOLO
 import random
 
 class PersonSegmentationNode(Node):
-    def __init__(self, image_topic):
+    def __init__(self):
         super().__init__('person_segmentation_node')
         self.img_pub = self.create_publisher(Image, '/yolov8_output', 10)
         self.subscription = self.create_subscription(
             Image,
-            image_topic,
+            '/camera/image_raw',
             self.image_listener_callback,
             10)
         self.bridge = CvBridge()
@@ -26,7 +26,8 @@ class PersonSegmentationNode(Node):
         results = self.model.predict(source=cv_image, device='cpu')[0].cpu()  # CPU에서 추론
 
         if not results.boxes:
-            self.get_logger().info('No objects detected')
+            print('No objects detected')
+            self.img_pub.publish(self.bridge.cv2_to_imgmsg(cv_image, encoding="bgr8"))
             return
 
         for bbox_info in results.boxes:
@@ -54,7 +55,7 @@ class PersonSegmentationNode(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    person_segmentation_node = PersonSegmentationNode(image_topic='/camera/image_raw')
+    person_segmentation_node = PersonSegmentationNode()
     rclpy.spin(person_segmentation_node)
     person_segmentation_node.destroy_node()
     rclpy.shutdown()
