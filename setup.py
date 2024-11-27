@@ -28,7 +28,10 @@ setup(
             'quart_test = my_pkg.quart_test:main',
             'measure_distance = my_pkg.measure_distance:main',
             'measure_command = my_pkg.measure_command:main',
-            'distance_gui = my_pkg.distance_gui:main',
+            'distance_to_gui = my_pkg.distance_to_gui:main',
+            'odom_callback = my_pkg.odom_callback:main',
+            'yolo = my_pkg.segment_human:main',
+            'move = my_pkg.cmd_robot:main',
         ],
     },
 )
